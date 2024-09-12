@@ -4,6 +4,8 @@
 
 🎯 **Visit the live site:** [NGLx - NGL Spammer](https://nglx.pages.dev/)
 
+💻 **Python CLI Version:** [NGLx-CLI](https://github.com/BrainlessDip/NGLx-CLI)
+
 ---
 
 ## ✨ **Features**
