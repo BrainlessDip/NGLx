@@ -23,12 +23,12 @@ To run NGLx on your local machine, follow these steps:
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/yourusername/NGLx-Spammer.git
+   git clone https://github.com/BrainlessDip/NGLx.git
    ```
    
 2. **Navigate to the Project Directory:**
    ```bash
-   cd NGLx-Spammer
+   cd NGLx
    ```
 
 3. **Open the HTML File:**
