@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NGLx - NGL Spammer</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #111;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 255, 0, 0.1);
+            padding: 20px;
+            max-width: 500px;
+            width: 90%;
+            margin: 20px;
+            text-align: center;
+            border: 1px solid #0f0;
+            position: relative;
+        }
+        h1 {
+            color: #0f0;
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+            text-shadow: 0 0 10px #0f0;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: left;
+            font-size: 1rem;
+        }
+        input, button {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #0f0;
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: #000;
+            color: #0f0;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        input:focus, button:focus {
+            outline: none;
+            border-color: #00ff00;
+            box-shadow: 0 0 8px #00ff00;
+        }
+        button {
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        button:disabled {
+            background-color: #555;
+            color: #888;
+            cursor: not-allowed;
+        }
+        button:hover:enabled {
+            background-color: #0f0;
+            color: #000;
+        }
+        #log {
+            margin-top: 10px;
+            white-space: pre-wrap;
+            background: #111;
+            padding: 10px;
+            border: 1px solid #0f0;
+            border-radius: 4px;
+            height: 150px;
+            overflow-y: auto;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+        #clearLog, #stopButton, #infoButton {
+            margin-top: 10px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        #clearLog {
+            margin-right: 10px;
+        }
+        #stopButton {
+            background-color: #f00;
+            color: #fff;
+            border-color: #f00;
+            display: none; /* Hidden by default */
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        #stopButton.show {
+            display: inline-block;
+            opacity: 1;
+            transform: scale(1);
+        }
+        #stopButton:hover:enabled {
+            background-color: #ff4444;
+            color: #000;
+        }
+        #loading {
+            display: none;
+            margin-bottom: 10px;
+            color: #0f0;
+            font-size: 0.9rem;
+            animation: pulse 1.5s infinite;
+        }
+        #credits {
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #0f0;
+            text-shadow: 0 0 5px #0f0;
+            font-weight: bold;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .button-container button {
+            flex: 1;
+        }
+        @keyframes pulse {
+            0% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0.5;
+            }
+        }
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
+        }
+        .modal-content {
+            background-color: #111;
+            margin: 15% auto; /* 15% from the top and centered horizontally */
+            padding: 20px;
+            border: 1px solid #0f0;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+        }
+        .modal-header {
+            font-size: 1.5rem;
+            color: #0f0;
+            margin-bottom: 15px;
+        }
+        .modal-body {
+            color: #0f0;
+            font-size: 1rem;
+        }
+        .modal-footer {
+            text-align: right;
+        }
+        #closeModal {
+            background-color: #0f0;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 4px;
+        }
+        #closeModal:hover {
+            background-color: #00cc00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="credits">Created by Brainless Dip</div>
+        <h1>NGLx - NGL Spammer</h1>
+        <form id="nglForm">
+            <label for="username">Username (with numbers in their NGL link):</label>
+            <input type="text" id="username" name="username" placeholder="e.g., user123" required>
+
+            <label for="message">Message:</label>
+            <input type="text" id="message" name="message" placeholder="Enter your message" required>
+
+            <label for="count">Message Count:</label>
+            <input type="number" id="count" name="count" required>
+
+            <label for="delay">Delay Between Messages (seconds):</label>
+            <input type="number" id="delay" name="delay" step="0.00001" required>
+            
+            <button type="submit" id="sendButton">Send Messages</button>
+        </form>
+
+        <div id="loading">Sending...</div>
+        <div id="log"></div>
+
+        <div class="button-container">
+            <button id="clearLog">Clear Log</button>
+            <button id="stopButton">Stop</button>
+        </div>
+        <div class="button-container">
+            <button id="infoButton" aria-label="Information">Information</button>
+        </div>
+    </div>
+
+    <!-- Information Modal -->
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">Easy CORS Setup</div>
+            <div class="modal-body">
+                To use NGLx, you need to install <strong><a href="https://chrome.google.com/webstore/detail/easy-cors/gcdaaelgdlicnnichhholnoagafangej" target="_blank" rel="noopener" style="color:red">EASY CORS</a></strong> extension and enable it in your browser.
+                <br><br>
+                <strong>Steps to Approve Domain:</strong>
+                <br><br>
+                1. Click on the Easy CORS extension icon in your Chrome toolbar.<br>
+                2. Go to the "Options" or "Settings" page.<br>
+                3. Add <strong>ngl.link</strong> to the list of allowed domains.<br>
+                4. Save the settings and refresh the page.<br><br>
+                <strong>Disclaimer:</strong>
+                <p>This tool is intended for educational purposes only. The creator is not responsible for any misuse or consequences.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="closeModal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        logMessage(`A PROJECT FROM BRAINLESS PROGRAMMERS`, "XD");
+        let stopSending = false;
+        let currentTimeout = null;
+
+        document.getElementById('infoButton').addEventListener('click', () => {
+            document.getElementById('infoModal').style.display = 'block';
+        });
+
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('infoModal').style.display = 'none';
+        });
+
+        document.getElementById('nglForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent form submission
+
+            const username = document.getElementById('username').value;
+            const message = document.getElementById('message').value;
+            const count = parseInt(document.getElementById('count').value, 10);
+            const delay = parseFloat(document.getElementById('delay').value) * 1000; // Convert delay to milliseconds
+
+            // Disable send button, show loading indicator and stop button
+            const sendButton = document.getElementById('sendButton');
+            const loadingIndicator = document.getElementById('loading');
+            const stopButton = document.getElementById('stopButton');
+            sendButton.disabled = true;
+            loadingIndicator.style.display = 'block';
+            stopButton.classList.add('show');
+            stopSending = false; // Reset stop flag
+
+            stopButton.addEventListener('click', function () {
+                stopSending = true; // Set stop flag to true on click
+                clearTimeout(currentTimeout); // Clear any pending timeouts
+                logMessage('Sending stopped by user.', 'N/A', 'error'); // Log immediate stop
+                resetUI(); // Reset UI immediately
+            });
+
+            // Function to send messages with delay in sequence
+            async function sendMessages() {
+                for (let i = 0; i < count; i++) {
+                    if (stopSending) break; // Stop immediately if stop flag is set
+                    await sendNglMessage(username, message, i + 1); // Pass the current index + 1
+                    decreaseValue();
+                    await new Promise(resolve => currentTimeout = setTimeout(resolve, delay)); // Use delay directly as a floating-point number
+                }
+                resetUI(); // Reset UI after completion
+            }
+
+            sendMessages(); // Start sending messages
+
+            function resetUI() {
+                // Re-enable send button and hide loading indicator and stop button
+                sendButton.disabled = false;
+                loadingIndicator.style.display = 'none';
+                stopButton.classList.remove('show');
+            }
+        });
+
+        document.getElementById('clearLog').addEventListener('click', function () {
+            document.getElementById('log').textContent = '';
+        });
+
+        async function sendNglMessage(username, message, loopNumber) {
+            const deviceId = generateDeviceId();
+            const data = {
+                username: username,
+                question: message,
+                deviceId: deviceId
+            };
+            const url = 'https://ngl.link/api/submit';
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.status === 200) {
+                    logMessage(`Sent message "${message}" to ${username}.`, loopNumber);
+                } else if (response.status === 429) {
+                    logMessage('Too many requests', "RATE LIMITED", 'error');
+                } else {
+                    const text = await response.text()
+                    logMessage(`Error: HTTP status ${response.status}: ${text}`, loopNumber, 'error');
+                }
+            } catch (error) {
+                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                    logMessage('CORS error kindly check information tab: ' + error.message, loopNumber, 'error');
+                } else {
+                    logMessage('Fetch error: ' + error.message, loopNumber, 'error');
+                }
+                console.error('Fetch error:', error);
+            }
+        }
+
+        function logMessage(message, loopNumber, type = 'info') {
+            const log = document.getElementById('log');
+            const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+            log.textContent += `[${loopNumber}][${time}] ${message}\n`;
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function decreaseValue() {
+            const input = document.getElementById('count');
+            const currentValue = parseInt(input.value, 10);
+            if (!isNaN(currentValue) && currentValue > 0) {
+                input.value = currentValue - 1;
+            }
+        }
+
+        function generateDeviceId() {
+            return Array.from({ length: 36 }, () =>
+                '0123456789abcdefghijklmnopqrstuvwxyz-'.charAt(Math.floor(Math.random() * 37))
+            ).join('');
+        }
+
+        // Save form data to localStorage on input change
+        document.querySelectorAll('#nglForm input').forEach(input => {
+            input.addEventListener('input', function () {
+                localStorage.setItem(this.id, this.value);
+            });
+        });
+
+        // Load form data from localStorage on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('#nglForm input').forEach(input => {
+                input.value = localStorage.getItem(input.id) || '';
+            });
+        });
+    </script>
+</body>
+</html>
