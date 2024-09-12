@@ -1,4 +1,4 @@
-# 🚀 **NGLx - NGL Spammer** 
+# **NGLx - NGL Spammer** 
 
 **NGLx** is a sleek, hacker-themed web tool designed to automate message submissions to NGL links. With this tool, you can customize messages, set sending counts, and define delays between each message. 
 
